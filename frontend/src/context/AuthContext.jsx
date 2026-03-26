@@ -28,6 +28,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("user");
     setToken(null);
     setUser(null);
+    
   };
 
   const value = useMemo(

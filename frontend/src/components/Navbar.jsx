@@ -1,11 +1,14 @@
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../context/useAuth";
 import { useState } from "react";
+// import useCart from '../context/useCart'
 
+import CartCount from "./CartCount";
 export default function Navbar() {
   const { isLoggedIn, isAdmin, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
+ 
   const linkBaseClasses =
     "px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-100 rounded-md";
 
@@ -16,6 +19,12 @@ export default function Navbar() {
           ShopEase
         </Link>
 
+        
+
+        <CartCount></CartCount>
+
+
+        {/* <div><span>{useCart.itemCartCount ?? 7}</span></div> */}
         <button
           type="button"
           className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 md:hidden"

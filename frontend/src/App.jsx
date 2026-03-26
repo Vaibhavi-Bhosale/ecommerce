@@ -9,13 +9,13 @@ import ProductDetail from "./pages/ProductDetail.jsx";
 import MyOrders from "./pages/MyOrders.jsx";
 import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminProducts from "./pages/AdminProducts.jsx";
+import { Navigate } from "react-router-dom";
 
 function ProtectedRoute({ children }) {
   const { isLoggedIn } = useAuth();
-
+  
   if (!isLoggedIn) {
-    window.location.href = "/login";
-    return null;
+    return <Navigate to="/login" replace />;
   }
 
   return children;
@@ -25,8 +25,7 @@ function AdminRoute({ children }) {
   const { isLoggedIn, isAdmin } = useAuth();
 
   if (!isLoggedIn || !isAdmin) {
-    window.location.href = "/";
-    return null;
+    return <Navigate to="/" replace />;
   }
 
   return children;

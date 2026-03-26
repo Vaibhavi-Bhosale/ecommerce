@@ -23,6 +23,8 @@ export const loginApi = async({email, password})=>{
 }
 
  export const signupApi = async({name, email, password})=>{
+
+      console.log(name,email,password)
        if(!name || !email || !password)
        {
           console.log("email or password or name is missing :: from login api")

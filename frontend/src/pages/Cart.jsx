@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import useCart from "../context/useCart";
 
 export default function Cart() {
   const [items, setItems] = useState([]);
@@ -8,6 +9,8 @@ export default function Cart() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const {fetchCount} = useCart()
 
   const fetchCart = async () => {
     setLoading(true);
@@ -34,6 +37,8 @@ export default function Cart() {
         data: { productId: item.productId || item._id || item.id },
       });
       await fetchCart();
+
+      fetchCount()
     } catch (err) {
       setError("Failed to remove item");
     } finally {
@@ -48,6 +53,7 @@ export default function Cart() {
     try {
       await api.delete("/cart/clear");
       await fetchCart();
+      fetchCount();
     } catch (err) {
       setError("Failed to clear cart");
     } finally {
@@ -62,6 +68,7 @@ export default function Cart() {
     try {
       await api.post("/orders");
       await fetchCart();
+      fetchCount()
       navigate("/orders/my");
     } catch (err) {
       setError("Failed to place order");

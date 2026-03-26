@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import useAuth from "../context/useAuth";
+import { getSingleProduct } from "../api/productApi";
+
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -14,14 +16,19 @@ export default function ProductDetail() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      try {
-        const res = await api.get(`/products/${id}`);
-        setProduct(res.data);
-      } catch (err) {
-        setError("Failed to load product");
-      } finally {
-        setLoading(false);
-      }
+       const res =  await getSingleProduct(id);
+
+       if(!res.success)
+       {
+           
+           setError(res.error);
+           console.log(res.error);
+       }
+       else{
+           setProduct(res.data);
+           console.log(res.data);
+           setLoading(false)
+       }
     };
 
     fetchProduct();

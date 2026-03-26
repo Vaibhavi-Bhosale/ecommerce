@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import useAuth from "../context/useAuth";
+import {getAllProductsApi} from "../api/productApi";
+import { addToCartApi } from "../api/cartApi";
+import useCart from "../context/useCart";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -10,39 +13,54 @@ export default function Home() {
   const [addingId, setAddingId] = useState(null);
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const {fetchCount} = useCart()
+       
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const res = await api.get("/products");
+       //async function
+      const res =await getAllProductsApi();
+      if (!res.success) {
+        setError(res.message);
+        console.log("error msg from home compo ", res.message);
+      } else {
         setProducts(res.data || []);
-      } catch (err) {
-        setError("Failed to load products");
-      } finally {
-        setLoading(false);
+        console.log("this from home", res.data);
       }
+      setLoading(false);
     };
 
     fetchProducts();
   }, []);
 
-  const handleAddToCart = async (product) => {
+  const handleAddToCart = async (productId) => {
     if (!isLoggedIn) {
       navigate("/login");
       return;
     }
+     
+    console.log("before add to cart")
+     
+    const res = await addToCartApi(productId);
+     fetchCount();
 
-    setAddingId(product._id || product.id);
-    try {
-      await api.post("/cart/addToCart", {
-        productId: product._id || product.id,
-        quantity: 1,
-      });
-      alert("Added to cart");
-    } catch (err) {
-      alert("Failed to add to cart");
-    } finally {
-      setAddingId(null);
+    console.log("after add to cart")
+
+    if(!res.success)
+    {
+      setError(res.message)
+    }
+    else{
+       alert("product added in cart");
+
+       console.log("before callling fetch count")
+
+       
+       setTimeout(() => {
+      fetchCount(); // 🔥 delayed fetch
+    }, 300);
+        
+    console.log("after callling fetch count")
     }
   };
 
@@ -124,7 +142,7 @@ export default function Home() {
                   </Link>
                   <button
                     type="button"
-                    onClick={() => handleAddToCart(product)}
+                    onClick={() => handleAddToCart(product._id)}
                     disabled={addingId === (product._id || product.id)}
                     className="flex-1 inline-flex items-center justify-center rounded-md bg-blue-600 px-2 py-1.5 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
                   >

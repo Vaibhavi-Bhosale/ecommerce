@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import api from "../api/axios";
+import signup from "../actions/auth/signup";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -17,15 +17,40 @@ export default function Register() {
     setError("");
     setSuccess("");
 
-    try {
-      await api.post("/auth/register", { name, email, password });
-      setSuccess("Registration successful. You can now login.");
-      setTimeout(() => navigate("/login"), 1000);
-    } catch (err) {
-      setError("Registration failed. Please try again.");
-    } finally {
-      setLoading(false);
+    // try {
+    //   await api.post("/auth/register", { name, email, password });
+    //   setSuccess("Registration successful. You can now login.");
+    //   setTimeout(() => navigate("/login"), 1000);
+    // } catch (err) {
+    //   setError("Registration failed. Please try again.");
+    // } finally {
+    //   setLoading(false);
+    // }
+
+    
+    if(!email || !password || !name)
+      {
+       
+      setLoading(false)
+      setError(" fill all fields")
+      return
     }
+
+    console.log({name, email, password})
+     const result = await signup({name, email, password})
+
+     if(!result)
+     {
+      setError("Registration failed. Please try again.");
+      setLoading(false);
+
+     }
+
+     setSuccess("Registration successful. You can now login.");
+     setLoading(false);
+     setTimeout(() => navigate("/login"), 500);
+
+
   };
 
   return (
