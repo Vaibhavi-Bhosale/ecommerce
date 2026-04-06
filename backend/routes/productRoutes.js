@@ -18,6 +18,21 @@ router.get("/", async (req, res) => {
 
 router.get("/search", async(req, res)=>{
      try{
+          const keyword = req.query.search ?
+          {
+              name : {
+                 $regex : req.query.search,
+                 $options : "i"
+              }
+          }
+          :{}
+
+          
+          const products = await Product.find(keyword);
+          console.log(products)
+           
+          res.json(products);
+
           
      }
      catch(error){
