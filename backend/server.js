@@ -4,7 +4,6 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 
-
 dotenv.config();
 connectDB();
 
@@ -13,23 +12,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// routes
 app.get("/", (req, res) => {
   res.send("API running");
 });
 
-//auth
 app.use("/api/auth", authRoutes);
 
-
 const protect = require("./middleware/authMiddleware");
-
 
 app.get("/api/protected", protect, (req, res) => {
   res.json({ message: "You are authorized", userId: req.user });
 });
 
-
-//product
 const productRoutes = require("./routes/productRoutes");
 app.use("/api/products", productRoutes);
 
@@ -39,8 +34,19 @@ app.use("/api/cart", cartRoutes);
 const adminProductRoutes = require("./routes/adminProductRoutes");
 app.use("/api/admin/products", adminProductRoutes);
 
-const orderRoute = require("./routes/orderRoutes")
+const orderRoute = require("./routes/orderRoutes");
 app.use("/api/orders", orderRoute);
+
+
+// 🔥 ADD THIS HERE (IMPORTANT)
+app.use((err, req, res, next) => {
+  console.log("🔥 REAL ERROR:", err);
+
+  res.status(500).json({
+    message: err.message,
+  });
+});
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);

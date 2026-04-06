@@ -5,6 +5,7 @@ const router = express.Router();
 
 // GET ALL PRODUCTS
 router.get("/", async (req, res) => {
+
   try {
     const products = await Product.find();
     res.json(products);
@@ -12,6 +13,18 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+//Search Products
+
+router.get("/search", async(req, res)=>{
+     try{
+          
+     }
+     catch(error){
+        res.status(500).json({ message: "Server error" });
+  
+     }
+})
 
 // GET SINGLE PRODUCT
 router.get("/:id", async (req, res) => {
