@@ -37,13 +37,12 @@ app.use("/api/admin/products", adminProductRoutes);
 const orderRoute = require("./routes/orderRoutes");
 app.use("/api/orders", orderRoute);
 
-
-// 🔥 ADD THIS HERE (IMPORTANT)
+ 
 app.use((err, req, res, next) => {
-  console.log("🔥 REAL ERROR:", err);
+  // console.log("error: ", err);
 
   res.status(500).json({
-    message: err.message,
+    error :err.message ,message: err.message,
   });
 });
 

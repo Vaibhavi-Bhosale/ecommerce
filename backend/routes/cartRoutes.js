@@ -5,9 +5,8 @@ const protect = require("../middleware/authMiddleware");
 const router = express.Router();
 
 
-// ==========================
+ 
 // ADD TO CART
-// ==========================
 router.post("/addToCart", protect, async (req, res) => {
   try {
     const { productId } = req.body;
@@ -35,14 +34,14 @@ router.post("/addToCart", protect, async (req, res) => {
 
     res.json(cart);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({error: error.message, message:"Not adding in cart! server error", error: error.message });
   }
 });
+ 
 
-
-// ==========================
+ 
 // REMOVE ITEM FROM CART
-// ==========================
+ 
 router.delete("/removeFromCart", protect, async (req, res) => {
   try {
     const { productId } = req.body;
@@ -50,7 +49,7 @@ router.delete("/removeFromCart", protect, async (req, res) => {
     let cart = await Cart.findOne({ user: req.user });
 
     if (!cart) {
-      return res.status(404).json({ message: "Cart not found" });
+      return res.status(404).json({error:"cart is not in database", message: "Cart not found" });
     }
 
     const itemIndex = cart.items.findIndex(
@@ -58,10 +57,10 @@ router.delete("/removeFromCart", protect, async (req, res) => {
     );
 
     if (itemIndex === -1) {
-      return res.status(404).json({ message: "Item not found" });
+      return res.status(404).json({error: "item not found in cart", message: "Item not found" });
     }
 
-    // 🔑 MAIN LOGIC
+    // MAIN LOGIC
     if (cart.items[itemIndex].quantity > 1) {
       cart.items[itemIndex].quantity -= 1;   // quantity kam
     } else {
@@ -72,7 +71,7 @@ router.delete("/removeFromCart", protect, async (req, res) => {
 
     res.json({ message: "Item updated", cart });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({message: "unable to remove product from cart",error: error.message });
   }
 });
 
@@ -110,10 +109,9 @@ router.delete("/removeFromCart", protect, async (req, res) => {
 //   }
 // });
 
-
-// ==========================
+ 
 // CLEAR CART
-// ==========================
+ 
 router.delete("/clear", protect, async (req, res) => {
   try {
     const cart = await Cart.findOneAndUpdate(
@@ -124,7 +122,7 @@ router.delete("/clear", protect, async (req, res) => {
 
     res.json({ message: "Cart cleared", cart });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({message: "unable to clear cart", error: error.message });
   }
 });
 
@@ -133,10 +131,18 @@ router.delete("/clear", protect, async (req, res) => {
 // GET USER CART
 // ==========================
 router.get("/", protect, async (req, res) => {
-  const cart = await Cart.findOne({ user: req.user })
+
+  try{
+     const cart = await Cart.findOne({ user: req.user })
     .populate("items.product");
 
-  res.json(cart);
+     res.status(200).json({data : cart, message: "user cart"});
+  }
+  catch(error)
+  {
+       res.status(500).json({message: "unable to load cart products", error: error.message });
+  }
+  
 });
 
 module.exports = router;

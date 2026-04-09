@@ -32,4 +32,24 @@ export const getSingleProduct = async(id)=>{
      }
 }
 
+
+export const getSearchApi = async (product)=>{
+
+     if(!product)
+     {
+          return {success : true, data : {}}
+     }
+
+     console.log("this is searching ", product)
+      try{
+            const res = await api.get(`/products/search?search=${product}`);
+
+            console.log(res.data);
+            return {success : true, data : res.data}
+      }
+      catch(err){
+          console.log(err.res?.data?.message);
+          return {success:false, message: "Failed to Search Products. Please try again later."}
+      }
+}
  

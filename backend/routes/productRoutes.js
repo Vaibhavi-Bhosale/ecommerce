@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({error:error.message, message: "unabel to get all products" });
   }
 });
 
@@ -26,17 +26,16 @@ router.get("/search", async(req, res)=>{
               }
           }
           :{}
-
           
           const products = await Product.find(keyword);
-          console.log(products)
+          // console.log(products)
            
-          res.json(products);
+          res.json({data : products, message:"product search"});
 
           
      }
      catch(error){
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({error:error.message, message: "unable to search! server error " });
   
      }
 })
@@ -47,12 +46,12 @@ router.get("/:id", async (req, res) => {
     const product = await Product.findById(req.params.id);
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({error:"product not found", message: "Product not found" });
     }
 
-    res.json(product);
+    res.status(200).json({data:product , message: "single product"});
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({error: error.message, message: "Server error" });
   }
 });
 

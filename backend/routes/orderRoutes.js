@@ -7,9 +7,9 @@ const admin = require("../middleware/adminMiddleware");
 const router = express.Router();
 
 
-// ==========================
+ 
 // PLACE ORDER
-// ==========================
+ 
 router.post("/", protect, async (req, res) => {
   try {
     const cart = await Cart.findOne({ user: req.user }).populate("items.product");
@@ -43,31 +43,49 @@ router.post("/", protect, async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message, message:"unable to place order! server problem" });
   }
 });
 
 
-// ==========================
+ 
 // GET USER ORDERS
-// ==========================
+ 
 router.get("/myOrders", protect, async (req, res) => {
-  const orders = await Order.find({ user: req.user })
+  
+  try{
+    const orders = await Order.find({ user: req.user })
     .populate("items.product");
-
-  res.json(orders);
+    
+    res.json({data:orders, message : "user orders"});
+    
+  }
+  catch(error)
+  {
+    res.status(500).json({ error: error.message, message:"unable to load user order! server problem" });
+    
+  }
 });
 
 
-// ==========================
+ 
 // ADMIN: GET ALL ORDERS
-// ==========================
+ 
 router.get("/", protect, admin, async (req, res) => {
-  const orders = await Order.find()
-    .populate("user", "name email")
-    .populate("items.product");
 
-  res.json(orders);
+  try{
+      const orders = await Order.find()
+      .populate("user", "name email")
+      .populate("items.product");
+
+     res.json({data : orders, message:"all orders of users"});
+  }
+  catch(error)
+  {
+    res.status(500).json({ error: error.message, message:"unable to load all user order! server problem" });
+
+  }
+ 
 });
 
 module.exports = router;

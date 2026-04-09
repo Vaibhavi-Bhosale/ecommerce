@@ -12,7 +12,7 @@ router.post("/register", async (req, res) => {
     // check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({error:"user already exits", message: "User already exists" });
     }
 
     // hash password
@@ -34,7 +34,7 @@ router.post("/register", async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({error : "signup failed", message: "Signup Failed! server error" });
   }
 });
 
@@ -48,13 +48,13 @@ router.post("/login", async (req, res) => {
     // check user
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({error:"invalid credintials", message: "Invalid credentials" });
     }
      
     // compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({error : "invalid credintials", message: "Invalid credentials" });
     }
 
     // generate token
@@ -76,7 +76,7 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({error:"login faild", message: "login faild ! server error" });
   }
 });
 

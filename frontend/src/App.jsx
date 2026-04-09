@@ -10,6 +10,8 @@ import MyOrders from "./pages/MyOrders.jsx";
 import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminProducts from "./pages/AdminProducts.jsx";
 import { Navigate } from "react-router-dom";
+import Search from "./components/search.jsx";
+
 
 function ProtectedRoute({ children }) {
   const { isLoggedIn } = useAuth();
@@ -36,6 +38,7 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50 flex flex-col">
         <Navbar />
+        <Search /> 
         <main className="flex-1 container mx-auto px-4 py-6">
           <Routes>
             <Route path="/" element={<Home />} />
