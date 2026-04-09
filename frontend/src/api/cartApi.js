@@ -5,11 +5,8 @@ export const addToCartApi = async(productId)=>{
 
    if(!productId)
    {
-      
       console.log("no product id")
-      return {status : false, message : "failed to add cart products. plz try later"};
-
-          
+      return {status : false, message : "failed to add cart products. plz try later"}
    }
    
     try {
@@ -36,9 +33,6 @@ export const productCountInCart  = async()=>{
         return 0;
 
     try{
-
-        
-
         console.log("api call again and again");
         const res = await api.get("/cart");
     

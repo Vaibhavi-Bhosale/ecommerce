@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import Container from "../components/Container";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import useAuth from "../context/useAuth";
 import login  from "../actions/auth/login"
@@ -8,20 +11,22 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const  auth = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setLoading(true);
-    setError("");
+    // setError("");
  
     if(!email || !password)
     {
       setLoading(false)
-      setError("email or password missing")
+      // setError("email or password missing")
+      toast.error("email or password missing");
       return
     }
 
@@ -30,7 +35,11 @@ export default function Login() {
     
     const status = await login({email,password},   auth);
 
-    if(!status) return
+    if(status.error){
+       toast.error(status.error)
+       setLoading(false)
+       return
+    }
 
     setLoading(false)
 
@@ -40,18 +49,19 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center py-10">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+    <Container>
+    <div className="flex items-center justify-center py-10 bg-[#D8CFBC]">
+      <div className="w-full max-w-md   rounded-lg shadow-sm border border-gray-100 p-6">
         <h1 className="text-xl font-semibold text-gray-900 mb-1">Login</h1>
         <p className="text-sm text-gray-600 mb-6">
           Sign in to access your cart and orders.
         </p>
 
-        {error && (
+        {/* {error && (
           <div className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
             {error}
           </div>
-        )}
+        )} */}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -107,5 +117,9 @@ export default function Login() {
         </p>
       </div>
     </div>
+
+    </Container>
+    
+  
   );
 }

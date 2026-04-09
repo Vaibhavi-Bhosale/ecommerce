@@ -11,6 +11,8 @@ import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminProducts from "./pages/AdminProducts.jsx";
 import { Navigate } from "react-router-dom";
 import Search from "./components/search.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function ProtectedRoute({ children }) {
@@ -36,10 +38,11 @@ function AdminRoute({ children }) {
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="min-h-screen  ">
+        <ToastContainer />
         <Navbar />
         <Search /> 
-        <main className="flex-1 container mx-auto px-4 py-6">
+        <main className=" ">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products/:id" element={<ProductDetail />} />

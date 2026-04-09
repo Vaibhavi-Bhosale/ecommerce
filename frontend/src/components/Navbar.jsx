@@ -2,11 +2,14 @@ import { Link, NavLink } from "react-router-dom";
 import useAuth from "../context/useAuth";
 import { useState } from "react";
 // import useCart from '../context/useCart'
+import  useTheme  from "../context/useTheme.js";
 
 import CartCount from "./CartCount";
 export default function Navbar() {
   const { isLoggedIn, isAdmin, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+
+   const { theme, setTheme } = useTheme();
 
  
   const linkBaseClasses =
@@ -18,7 +21,12 @@ export default function Navbar() {
         <Link to="/" className="text-xl font-bold text-blue-600">
           ShopEase
         </Link>
-
+      <button
+      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      className="px-4 py-2 bg-gray-200 dark:bg-gray-800 rounded"
+    >
+      {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+    </button>
         
 
         <CartCount></CartCount>

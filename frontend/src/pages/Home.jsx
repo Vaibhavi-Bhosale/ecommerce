@@ -82,6 +82,10 @@ export default function Home() {
 
   return (
     <div>
+
+      {/* <div className="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white">
+  Hello Theme 🌗
+</div> */}
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Products</h1>
