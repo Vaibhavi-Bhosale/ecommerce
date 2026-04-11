@@ -55,9 +55,9 @@ export default function Register() {
 
   return (
     <div className="flex items-center justify-center py-10">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-        <h1 className="text-xl font-semibold text-gray-900 mb-1">Register</h1>
-        <p className="text-sm text-gray-600 mb-6">
+      <div className="w-full max-w-md neo-card p-6">
+        <h1 className="text-3xl font-black tracking-tight text-[color:var(--text)] mb-1">Register</h1>
+        <p className="text-sm text-[color:var(--text-muted)] mb-6">
           Create an account to start shopping.
         </p>
 
@@ -77,7 +77,7 @@ export default function Register() {
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-[color:var(--text)] mb-1"
             >
               Name
             </label>
@@ -87,7 +87,7 @@ export default function Register() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="neo-input block w-full rounded-xl px-3 py-2 text-sm"
               placeholder="John Doe"
             />
           </div>
@@ -95,7 +95,7 @@ export default function Register() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-[color:var(--text)] mb-1"
             >
               Email
             </label>
@@ -105,7 +105,7 @@ export default function Register() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="neo-input block w-full rounded-xl px-3 py-2 text-sm"
               placeholder="you@example.com"
             />
           </div>
@@ -113,7 +113,7 @@ export default function Register() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-[color:var(--text)] mb-1"
             >
               Password
             </label>
@@ -123,7 +123,7 @@ export default function Register() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="neo-input block w-full rounded-xl px-3 py-2 text-sm"
               placeholder="••••••••"
             />
           </div>
@@ -131,15 +131,15 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            className="w-full inline-flex justify-center rounded-full bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
           >
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
-        <p className="mt-4 text-xs text-gray-600">
+        <p className="mt-4 text-xs text-[color:var(--text-muted)]">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-[color:var(--primary-strong)] hover:underline">
             Login
           </Link>
         </p>

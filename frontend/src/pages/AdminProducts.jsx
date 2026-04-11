@@ -101,10 +101,10 @@ export default function AdminProducts() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900">
+        <h1 className="text-3xl font-black tracking-tight text-[color:var(--text)]">
           Manage Products
         </h1>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-[color:var(--text-muted)]">
           Create, update, and delete products.
         </p>
       </div>
@@ -117,10 +117,10 @@ export default function AdminProducts() {
 
       <form
         onSubmit={handleSubmit}
-        className="mb-8 grid gap-4 rounded-lg border border-gray-200 bg-white p-4 md:grid-cols-2"
+        className="mb-8 grid gap-4 neo-card p-4 md:grid-cols-2"
       >
         <div className="md:col-span-2">
-          <h2 className="text-sm font-semibold text-gray-900 mb-2">
+          <h2 className="text-sm font-semibold text-[color:var(--text)] mb-2">
             {editingId ? "Edit product" : "Add new product"}
           </h2>
         </div>
@@ -128,7 +128,7 @@ export default function AdminProducts() {
         <div>
           <label
             htmlFor="name"
-            className="block text-xs font-medium text-gray-700 mb-1"
+            className="block text-xs font-medium text-[color:var(--text)] mb-1"
           >
             Name
           </label>
@@ -139,14 +139,14 @@ export default function AdminProducts() {
             required
             value={form.name}
             onChange={handleChange}
-            className="block w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="neo-input block w-full rounded-xl px-2 py-1.5 text-sm"
           />
         </div>
 
         <div>
           <label
             htmlFor="price"
-            className="block text-xs font-medium text-gray-700 mb-1"
+            className="block text-xs font-medium text-[color:var(--text)] mb-1"
           >
             Price
           </label>
@@ -158,14 +158,14 @@ export default function AdminProducts() {
             required
             value={form.price}
             onChange={handleChange}
-            className="block w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="neo-input block w-full rounded-xl px-2 py-1.5 text-sm"
           />
         </div>
 
         <div>
           <label
             htmlFor="image"
-            className="block text-xs font-medium text-gray-700 mb-1"
+            className="block text-xs font-medium text-[color:var(--text)] mb-1"
           >
             Image URL
           </label>
@@ -175,14 +175,14 @@ export default function AdminProducts() {
             type="url"
             value={form.image}
             onChange={handleChange}
-            className="block w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="neo-input block w-full rounded-xl px-2 py-1.5 text-sm"
           />
         </div>
 
         <div>
           <label
             htmlFor="category"
-            className="block text-xs font-medium text-gray-700 mb-1"
+            className="block text-xs font-medium text-[color:var(--text)] mb-1"
           >
             Category
           </label>
@@ -192,14 +192,14 @@ export default function AdminProducts() {
             type="text"
             value={form.category}
             onChange={handleChange}
-            className="block w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="neo-input block w-full rounded-xl px-2 py-1.5 text-sm"
           />
         </div>
 
         <div className="md:col-span-2">
           <label
             htmlFor="description"
-            className="block text-xs font-medium text-gray-700 mb-1"
+            className="block text-xs font-medium text-[color:var(--text)] mb-1"
           >
             Description
           </label>
@@ -209,7 +209,7 @@ export default function AdminProducts() {
             rows={3}
             value={form.description}
             onChange={handleChange}
-            className="block w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="neo-input block w-full rounded-xl px-2 py-1.5 text-sm"
           />
         </div>
 
@@ -217,7 +217,7 @@ export default function AdminProducts() {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            className="inline-flex items-center justify-center rounded-full bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
           >
             {submitting
               ? "Saving..."
@@ -229,7 +229,7 @@ export default function AdminProducts() {
             <button
               type="button"
               onClick={resetForm}
-              className="inline-flex items-center justify-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="inline-flex items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--text)_14%,transparent)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] hover:bg-[color:color-mix(in_srgb,var(--surface-2)_45%,transparent)]"
             >
               Cancel edit
             </button>
@@ -242,16 +242,16 @@ export default function AdminProducts() {
           <span className="text-gray-600">Loading products...</span>
         </div>
       ) : products.length === 0 ? (
-        <p className="text-gray-600">No products found.</p>
+        <p className="text-[color:var(--text-muted)]">No products found.</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols=3">
           {products.map((product) => (
             <div
               key={product._id || product.id}
-              className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 flex flex-col"
+              className="neo-card p-4 flex flex-col"
             >
               <div className="flex items-start gap-3 mb-3">
-                <div className="h-16 w-16 flex items-center justify-center rounded-md bg-gray-50 overflow-hidden">
+                <div className="h-16 w-16 flex items-center justify-center rounded-xl bg-[color:color-mix(in_srgb,var(--bg-soft)_70%,transparent)] overflow-hidden">
                   {product.image ? (
                     <img
                       src={product.image}
@@ -259,23 +259,23 @@ export default function AdminProducts() {
                       className="h-full w-full object-contain p-1"
                     />
                   ) : (
-                    <span className="text-xs text-gray-400">No image</span>
+                    <span className="text-xs text-[color:var(--text-muted)]">No image</span>
                   )}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">
+                  <p className="text-sm font-semibold text-[color:var(--text)]">
                     {product.name}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[color:var(--text-muted)]">
                     {product.category || "No category"}
                   </p>
-                  <p className="text-sm font-bold text-emerald-600">
+                  <p className="text-sm font-black text-[color:var(--primary-strong)]">
                     ${product.price}
                   </p>
                 </div>
               </div>
 
-              <p className="text-xs text-gray-600 line-clamp-3 mb-3">
+              <p className="text-xs text-[color:var(--text-muted)] line-clamp-3 mb-3">
                 {product.description}
               </p>
 
@@ -283,7 +283,7 @@ export default function AdminProducts() {
                 <button
                   type="button"
                   onClick={() => handleEdit(product)}
-                  className="flex-1 inline-flex items-center justify-center rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                  className="flex-1 inline-flex items-center justify-center rounded-full border border-[color:color-mix(in_srgb,var(--text)_14%,transparent)] px-3 py-1.5 text-xs font-semibold text-[color:var(--text)] hover:bg-[color:color-mix(in_srgb,var(--surface-2)_45%,transparent)]"
                 >
                   Edit
                 </button>
@@ -291,7 +291,7 @@ export default function AdminProducts() {
                   type="button"
                   onClick={() => handleDelete(product)}
                   disabled={submitting}
-                  className="flex-1 inline-flex items-center justify-center rounded-md bg-red-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-600 disabled:opacity-50"
+                  className="flex-1 inline-flex items-center justify-center rounded-full bg-[color:var(--primary-strong)] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
                 >
                   Delete
                 </button>

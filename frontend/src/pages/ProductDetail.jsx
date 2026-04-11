@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import useAuth from "../context/useAuth";
 import { getSingleProduct } from "../api/productApi";
+import { toast } from "react-toastify";
 
 
 export default function ProductDetail() {
@@ -12,7 +13,7 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
+ 
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -21,8 +22,9 @@ export default function ProductDetail() {
        if(!res.success)
        {
            
-           setError(res.error);
+           toast.error(res.error)
            console.log(res.error);
+           navigate("/")
        }
        else{
            setProduct(res.data);
@@ -41,7 +43,7 @@ export default function ProductDetail() {
     }
 
     setSubmitting(true);
-    setError("");
+    
     try {
       await api.post("/cart/addToCart", {
         productId: product._id || product.id || id,
@@ -49,7 +51,7 @@ export default function ProductDetail() {
       });
       alert("Added to cart");
     } catch (err) {
-      setError("Failed to add to cart");
+          setError("Failed to add to cart");
     } finally {
       setSubmitting(false);
     }
@@ -58,59 +60,59 @@ export default function ProductDetail() {
   if (loading) {
     return (
       <div className="flex justify-center py-10">
-        <span className="text-gray-600">Loading product...</span>
+        <span className="text-[color:var(--text-muted)]">Loading product...</span>
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="max-w-3xl mx-auto py-10">
-        <p className="text-red-600">{error}</p>
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className="max-w-3xl mx-auto py-10">
+  //       <p className="text-red-600">{error}</p>
+  //     </div>
+  //   );
+  // }
 
   if (!product) {
     return (
       <div className="max-w-3xl mx-auto py-10">
-        <p className="text-gray-600">Product not found.</p>
+        <p className="text-[color:var(--text-muted)]">Product not found.</p>
       </div>
     );
   }
 
   return (
     <div className="max-w-4xl mx-auto py-6 grid gap-8 md:grid-cols-2">
-      <div className="rounded-lg overflow-hidden bg-white shadow-sm flex items-center justify-center">
+      <div className="neo-card overflow-hidden flex items-center justify-center">
         {product.image ? (
           <img
             src={product.image}
             alt={product.name}
-            className="h-72 w-full object-contain p-4"
+            className="h-72 w-full object-fit"
           />
         ) : (
-          <div className="h-72 w-full flex items-center justify-center text-gray-400">
+          <div className="h-72 w-full flex items-center justify-center text-[color:var(--text-muted)]">
             No image
           </div>
         )}
       </div>
 
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900 mb-2">
+        <h1 className="text-3xl font-black tracking-tight text-[color:var(--text)] mb-2">
           {product.name}
         </h1>
-        <p className="text-emerald-600 text-xl font-bold mb-4">
+        <p className="text-[color:var(--primary-strong)] text-xl font-black mb-4">
           ${product.price}
         </p>
         {product.category && (
-          <p className="text-sm text-gray-500 mb-2">
+          <p className="text-sm text-[color:var(--text-muted)] mb-2">
             Category:{" "}
-            <span className="font-medium text-gray-700">
+            <span className="font-semibold text-[color:var(--text)]">
               {product.category}
             </span>
           </p>
         )}
-        <p className="text-gray-700 mb-6">
+        <p className="text-[color:var(--text)]/90 mb-6">
           {product.description || "No description available."}
         </p>
 
@@ -119,14 +121,14 @@ export default function ProductDetail() {
             type="button"
             onClick={handleAddToCart}
             disabled={submitting}
-            className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+            className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-[color:var(--primary)] text-white text-sm font-semibold hover:opacity-90 disabled:opacity-50"
           >
             {submitting ? "Adding..." : "Add to cart"}
           </button>
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="inline-flex items-center justify-center px-4 py-2 rounded-md border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="inline-flex items-center justify-center px-4 py-2 rounded-full border border-[color:color-mix(in_srgb,var(--text)_14%,transparent)] text-sm font-semibold text-[color:var(--text)] hover:bg-[color:color-mix(in_srgb,var(--surface-2)_45%,transparent)]"
           >
             Back
           </button>

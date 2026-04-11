@@ -1,43 +1,48 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
+import Container from '../components/Container'
+import { useSearchParams } from 'react-router-dom';
+import { getSearchApi } from '../api/productApi';
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../context/useAuth";
-import {getAllProductsApi} from "../api/productApi";
-import { addToCartApi } from "../api/cartApi";
+ import { addToCartApi } from "../api/cartApi";
 import useCart from "../context/useCart";
 import { toast } from "react-toastify";
 import Product from "../components/Product";
 
 
+function SearchProducts() {
 
-export default function Home() {
-  const [products, setProducts] = useState([]);
+
+    const [searchParams] = useSearchParams();
+   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+ 
   const [addingId, setAddingId] = useState(null);
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const {fetchCount} = useCart()
-       
+    useEffect(()=>{
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-       //async function
-      const res =await getAllProductsApi();
-      if (!res.success) {
-        setError(res.message);
-        toast.error(res.message)
-        // console.log("error msg from home compo ", res.message);
-      } else {
-        setProducts(res.data || []);
-        // console.log("this from home", res.data);
-      }
-      setLoading(false);
-    };
+        async function apiCall(){
 
-    fetchProducts();
-  }, []);
+            const productQuery = searchParams.get("q");
+            const res = await getSearchApi(productQuery);
+            // console.log("FAAAAAAAAAAAAAA : ",res.data);
 
-  const handleAddToCart = async (productId) => {
+            if(!res.success)
+            {
+                toast.error(res.message)
+                navigate("/")
+            }
+            
+            setProducts(res.data || []);
+            setLoading(false);
+        }
+
+        apiCall();
+    },[searchParams])
+
+    const handleAddToCart = async (productId) => {
     if (!isLoggedIn) {
       toast.info("login for add to cart")
       navigate("/login");
@@ -70,9 +75,8 @@ export default function Home() {
         
     // console.log("after callling fetch count")
     }
-  };
 
-  if (loading) {
+    if (loading) {
     return (
       <div className="flex justify-center py-10">
         <span className="text-gray-600">Loading products...</span>
@@ -80,16 +84,18 @@ export default function Home() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="py-10">
-        <p className="text-red-600">{error}</p>
-      </div>
-    );
-  }
+//   if (error) {
+//     return (
+//       <div className="py-10">
+//         <p className="text-red-600">{error}</p>
+//       </div>
+//     );
+//   }
+  };
 
   return (
-    <div>
+
+    <Container>  <div>
 
       {/* <div className="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white">
   Hello Theme 🌗
@@ -113,12 +119,15 @@ export default function Home() {
 
 
 
-                 <Product key={product._id} product={product} handleAddToCart={handleAddToCart}   addingId={addingId}/>
+                 <Product product={product} handleAddToCart={handleAddToCart}   addingId={addingId}/>
 
 
           ))}
         </div>
       )}
-    </div>
-  );
+    </div></Container> 
+  
+  )
 }
+
+export default SearchProducts

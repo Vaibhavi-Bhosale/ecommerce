@@ -33,7 +33,7 @@ export const productCountInCart  = async()=>{
         return 0;
 
     try{
-        console.log("api call again and again");
+        // console.log("api call again and again");
         const res = await api.get("/cart");
     
         return res?.data?.items?.length ?? 0;
@@ -43,3 +43,21 @@ export const productCountInCart  = async()=>{
     }
 
 }
+
+export const cartApi = async()=>{
+     if(! localStorage.getItem("token"))
+         return
+
+     try{
+        const res = await api.get('/cart');
+
+        return res.data?.data?.items;
+
+     }
+     catch(error)
+     {
+        console.log("error fro cart api : ", error)
+         return {success : false, message : "failed to load cart"}
+     }
+}
+

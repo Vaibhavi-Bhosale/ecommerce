@@ -26,8 +26,8 @@ export default function AdminOrders() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900">All Orders</h1>
-        <p className="text-sm text-gray-600">
+        <h1 className="text-3xl font-black tracking-tight text-[color:var(--text)]">All Orders</h1>
+        <p className="text-sm text-[color:var(--text-muted)]">
           Admin view of all customer orders.
         </p>
       </div>
@@ -43,21 +43,21 @@ export default function AdminOrders() {
           <span className="text-gray-600">Loading orders...</span>
         </div>
       ) : orders.length === 0 ? (
-        <p className="text-gray-600">No orders found.</p>
+        <p className="text-[color:var(--text-muted)]">No orders found.</p>
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
             <div
               key={order._id || order.id}
-              className="rounded-lg border border-gray-200 bg-white p-4"
+              className="neo-card p-4"
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-semibold text-[color:var(--text)]">
                     Order #{order._id || order.id}
                   </p>
                   {order.user && (
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[color:var(--text-muted)]">
                       User:{" "}
                       {order.user.email ||
                         order.user.name ||
@@ -66,20 +66,20 @@ export default function AdminOrders() {
                     </p>
                   )}
                   {order.createdAt && (
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[color:var(--text-muted)]">
                       {new Date(order.createdAt).toLocaleString()}
                     </p>
                   )}
                 </div>
                 {order.status && (
-                  <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+                  <span className="inline-flex items-center rounded-full bg-[color:color-mix(in_srgb,var(--surface-2)_50%,transparent)] px-3 py-1 text-xs font-semibold text-[color:var(--text)]">
                     {order.status}
                   </span>
                 )}
               </div>
 
               {Array.isArray(order.items) && order.items.length > 0 && (
-                <ul className="mb-2 space-y-1 text-sm text-gray-700">
+                <ul className="mb-2 space-y-1 text-sm text-[color:var(--text)]/90">
                   {order.items.map((item) => (
                     <li key={item._id || item.id}>
                       {item.product?.name || "Product"} &times;{" "}
@@ -90,7 +90,7 @@ export default function AdminOrders() {
               )}
 
               {order.total && (
-                <p className="text-sm font-semibold text-emerald-600">
+                <p className="text-sm font-black text-[color:var(--primary-strong)]">
                   Total: ${Number(order.total).toFixed(2)}
                 </p>
               )}

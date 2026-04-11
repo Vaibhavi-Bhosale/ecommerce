@@ -22,7 +22,7 @@ export const getSingleProduct = async(id)=>{
      try{
           const res = await api.get(`/products/${id}`)
           console.log(res.data)
-          return {success:true, data: res.data}
+          return {success:true, data: res.data?.data}
          
      } 
      catch(err)
@@ -45,7 +45,8 @@ export const getSearchApi = async (product)=>{
             const res = await api.get(`/products/search?search=${product}`);
 
             console.log(res.data);
-            return {success : true, data : res.data}
+            console.log("api call")
+            return {success : true, data : res.data.data}
       }
       catch(err){
           console.log(err.res?.data?.message);

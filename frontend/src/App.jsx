@@ -9,8 +9,8 @@ import ProductDetail from "./pages/ProductDetail.jsx";
 import MyOrders from "./pages/MyOrders.jsx";
 import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminProducts from "./pages/AdminProducts.jsx";
+import SearchProducts from "./pages/SearchProducts.jsx";
 import { Navigate } from "react-router-dom";
-import Search from "./components/search.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -38,13 +38,14 @@ function AdminRoute({ children }) {
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen  ">
+      <div className="min-h-dvh flex flex-col w-full">
         <ToastContainer />
         <Navbar />
-        <Search /> 
-        <main className=" ">
+      
+        <main className="container mx-auto w-full flex-1 px-4 pb-6 pt-4 md:pt-6">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/search" element={<SearchProducts/>}/> 
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

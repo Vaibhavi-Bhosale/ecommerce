@@ -4,7 +4,9 @@ import { useState } from "react";
 // import useCart from '../context/useCart'
 import  useTheme  from "../context/useTheme.js";
 
+
 import CartCount from "./CartCount";
+import Search from "./search.jsx";
 export default function Navbar() {
   const { isLoggedIn, isAdmin, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -13,29 +15,36 @@ export default function Navbar() {
 
  
   const linkBaseClasses =
-    "px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-100 rounded-md";
+    "px-3 py-2 text-sm font-medium rounded-full transition-colors text-[color:var(--text-muted)] hover:text-[color:var(--text)] hover:bg-[color:color-mix(in_srgb,var(--surface-2)_45%,transparent)]";
 
   return (
-    <nav className="bg-white shadow-sm">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="text-xl font-bold text-blue-600">
-          ShopEase
-        </Link>
+    <nav className="neo-surface sticky top-0 z-40 border-b border-[color:color-mix(in_srgb,var(--text)_10%,transparent)]">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 shrink-0">
+          <Link to="/" className="text-xl font-black tracking-tight text-[color:var(--text)]">
+            ShopEase
+          </Link>
+          <CartCount className="md:hidden" />
+        </div>
+
+        <div className="hidden lg:block lg:flex-1 lg:max-w-xl">
+          <Search />
+        </div>
+
+        <CartCount className="hidden md:inline-flex" />
+
       <button
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="px-4 py-2 bg-gray-200 dark:bg-gray-800 rounded"
+      className="hidden md:inline-flex px-4 py-2 rounded-full text-xs font-semibold neo-card"
     >
       {theme === "light" ? "🌙 Dark" : "☀️ Light"}
     </button>
-        
-
-        <CartCount></CartCount>
 
 
         {/* <div><span>{useCart.itemCartCount ?? 7}</span></div> */}
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 md:hidden"
+          className="inline-flex items-center justify-center rounded-full p-2.5 text-[color:var(--text)] hover:bg-[color:color-mix(in_srgb,var(--surface-2)_45%,transparent)] focus:outline-none md:hidden"
           onClick={() => setIsOpen((prev) => !prev)}
         >
           <span className="sr-only">Toggle navigation</span>
@@ -68,7 +77,9 @@ export default function Navbar() {
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `${linkBaseClasses} ${isActive ? "bg-gray-100" : ""}`
+              `${linkBaseClasses} ${
+                isActive ? "neo-card text-[color:var(--text)]" : ""
+              }`
             }
           >
             Products
@@ -78,7 +89,9 @@ export default function Navbar() {
             <NavLink
               to="/orders/my"
               className={({ isActive }) =>
-                `${linkBaseClasses} ${isActive ? "bg-gray-100" : ""}`
+                `${linkBaseClasses} ${
+                  isActive ? "neo-card text-[color:var(--text)]" : ""
+                }`
               }
             >
               My Orders
@@ -88,7 +101,9 @@ export default function Navbar() {
           <NavLink
             to="/cart"
             className={({ isActive }) =>
-              `${linkBaseClasses} ${isActive ? "bg-gray-100" : ""}`
+              `${linkBaseClasses} ${
+                isActive ? "neo-card text-[color:var(--text)]" : ""
+              }`
             }
           >
             Cart
@@ -99,7 +114,9 @@ export default function Navbar() {
               <NavLink
                 to="/admin/products"
                 className={({ isActive }) =>
-                  `${linkBaseClasses} ${isActive ? "bg-gray-100" : ""}`
+                  `${linkBaseClasses} ${
+                    isActive ? "neo-card text-[color:var(--text)]" : ""
+                  }`
                 }
               >
                 Admin Products
@@ -107,7 +124,9 @@ export default function Navbar() {
               <NavLink
                 to="/admin/orders"
                 className={({ isActive }) =>
-                  `${linkBaseClasses} ${isActive ? "bg-gray-100" : ""}`
+                  `${linkBaseClasses} ${
+                    isActive ? "neo-card text-[color:var(--text)]" : ""
+                  }`
                 }
               >
                 Admin Orders
@@ -120,7 +139,9 @@ export default function Navbar() {
               <NavLink
                 to="/login"
                 className={({ isActive }) =>
-                  `${linkBaseClasses} ${isActive ? "bg-gray-100" : ""}`
+                  `${linkBaseClasses} ${
+                    isActive ? "neo-card text-[color:var(--text)]" : ""
+                  }`
                 }
               >
                 Login
@@ -128,7 +149,9 @@ export default function Navbar() {
               <NavLink
                 to="/register"
                 className={({ isActive }) =>
-                  `${linkBaseClasses} ${isActive ? "bg-gray-100" : ""}`
+                  `${linkBaseClasses} ${
+                    isActive ? "neo-card text-[color:var(--text)]" : ""
+                  }`
                 }
               >
                 Register
@@ -138,7 +161,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={logout}
-              className="ml-2 px-3 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-md"
+              className="ml-2 px-4 py-2 text-sm font-semibold text-white rounded-full bg-[color:var(--primary-strong)] hover:opacity-90"
             >
               Logout
             </button>
@@ -146,14 +169,20 @@ export default function Navbar() {
         </div>
       </div>
 
+      <div className="px-4 pb-3 lg:hidden">
+        <Search />
+      </div>
+
       {isOpen && (
-        <div className="md:hidden border-t border-gray-200 bg-white">
+        <div className="md:hidden border-t border-[color:color-mix(in_srgb,var(--text)_10%,transparent)]">
           <div className="px-4 py-3 space-y-1">
             <NavLink
               to="/"
               onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
-                `${linkBaseClasses} block ${isActive ? "bg-gray-100" : ""}`
+                `${linkBaseClasses} block ${
+                  isActive ? "neo-card text-[color:var(--text)]" : ""
+                }`
               }
             >
               Products
@@ -165,7 +194,7 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
                 className={({ isActive }) =>
                   `${linkBaseClasses} block ${
-                    isActive ? "bg-gray-100" : ""
+                    isActive ? "neo-card text-[color:var(--text)]" : ""
                   }`
                 }
               >
@@ -177,7 +206,9 @@ export default function Navbar() {
               to="/cart"
               onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
-                `${linkBaseClasses} block ${isActive ? "bg-gray-100" : ""}`
+                `${linkBaseClasses} block ${
+                  isActive ? "neo-card text-[color:var(--text)]" : ""
+                }`
               }
             >
               Cart
@@ -190,7 +221,7 @@ export default function Navbar() {
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
                     `${linkBaseClasses} block ${
-                      isActive ? "bg-gray-100" : ""
+                      isActive ? "neo-card text-[color:var(--text)]" : ""
                     }`
                   }
                 >
@@ -201,7 +232,7 @@ export default function Navbar() {
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
                     `${linkBaseClasses} block ${
-                      isActive ? "bg-gray-100" : ""
+                      isActive ? "neo-card text-[color:var(--text)]" : ""
                     }`
                   }
                 >
@@ -217,7 +248,7 @@ export default function Navbar() {
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
                     `${linkBaseClasses} block ${
-                      isActive ? "bg-gray-100" : ""
+                      isActive ? "neo-card text-[color:var(--text)]" : ""
                     }`
                   }
                 >
@@ -228,7 +259,7 @@ export default function Navbar() {
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
                     `${linkBaseClasses} block ${
-                      isActive ? "bg-gray-100" : ""
+                      isActive ? "neo-card text-[color:var(--text)]" : ""
                     }`
                   }
                 >
@@ -242,7 +273,7 @@ export default function Navbar() {
                   logout();
                   setIsOpen(false);
                 }}
-                className="w-full text-left px-3 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-md"
+                className="w-full text-left px-3 py-2 text-sm font-semibold text-white rounded-xl bg-[color:var(--primary-strong)] hover:opacity-90"
               >
                 Logout
               </button>

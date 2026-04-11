@@ -50,10 +50,12 @@ export default function Login() {
 
   return (
     <Container>
-    <div className="flex items-center justify-center py-10 bg-[#D8CFBC]">
-      <div className="w-full max-w-md   rounded-lg shadow-sm border border-gray-100 p-6">
-        <h1 className="text-xl font-semibold text-gray-900 mb-1">Login</h1>
-        <p className="text-sm text-gray-600 mb-6">
+    <div className="flex items-center justify-center py-10">
+
+     
+      <div className="w-full max-w-md neo-card p-6">
+        <h1 className="text-3xl font-black tracking-tight mb-1 text-[color:var(--text)]">Login !</h1>
+        <p className="text-sm mb-6 text-[color:var(--text-muted)]">
           Sign in to access your cart and orders.
         </p>
 
@@ -67,7 +69,7 @@ export default function Login() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium mb-1 text-[color:var(--text)]"
             >
               Email
             </label>
@@ -77,7 +79,7 @@ export default function Login() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="neo-input block w-full rounded-xl px-3 py-2 text-sm"
               placeholder="you@example.com"
             />
           </div>
@@ -85,7 +87,7 @@ export default function Login() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium mb-1 text-[color:var(--text)]"
             >
               Password
             </label>
@@ -95,7 +97,7 @@ export default function Login() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="neo-input block w-full rounded-xl px-3 py-2 text-sm"
               placeholder="••••••••"
             />
           </div>
@@ -103,15 +105,15 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            className="w-full inline-flex justify-center rounded-full bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <p className="mt-4 text-xs text-gray-600">
+        <p className="mt-4 text-xs text-[color:var(--text-muted)]">
           Don't have an account?{" "}
-          <Link to="/register" className="text-blue-600 hover:underline">
+          <Link to="/register" className="text-[color:var(--primary-strong)] hover:underline">
             Register
           </Link>
         </p>
