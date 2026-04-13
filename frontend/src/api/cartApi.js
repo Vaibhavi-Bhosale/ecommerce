@@ -56,8 +56,46 @@ export const cartApi = async()=>{
      }
      catch(error)
      {
-        console.log("error fro cart api : ", error)
+        console.log("error from cart api : ", error)
          return {success : false, message : "failed to load cart"}
      }
 }
 
+export const removeFromCartApi = async(productId)=>{
+
+    console.log("product id : ",productId)
+     if(!localStorage.getItem("token"))
+         return
+
+     try{
+         const res =await api.delete(`/cart/removeFromCart${productId}`  )
+         console.log("product delete : ", res)
+
+         return {success : true}
+
+
+     }catch(err)
+     {
+         console.log("where is this line : ", err.message);
+
+         return {success : false, message : "failed to delete product from cart"}
+     }
+}
+
+export const clearCartApi = async()=>{
+
+    console.log("clear cart api run")
+
+    if(!localStorage.getItem("token"))
+        return
+     try{
+         const res = await api.delete('/cart/clear')
+         console.log(res.data)
+
+         return {success : true}
+     }catch(err)
+     {
+        console.log(err)
+        return {success : false, message : "cart not clear !"}
+     }
+}

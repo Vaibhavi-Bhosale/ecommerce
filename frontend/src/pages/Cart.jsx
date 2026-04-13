@@ -5,6 +5,8 @@ import useCart from "../context/useCart";
 import { cartApi } from "../api/cartApi";
 import useAuth from "../context/useAuth";
 import { toast } from "react-toastify";
+import { removeFromCartApi } from "../api/cartApi";
+import {clearCartApi} from "../api/cartApi"
 
 export default function Cart() {
   const [products, setProducts] = useState([]);
@@ -12,7 +14,7 @@ export default function Cart() {
   // const [submitting, setSubmitting] = useState(false);
   // const [error, setError] = useState("");
   const navigate = useNavigate();
-   
+    
 
   const { isLoggedIn } = useAuth();
 
@@ -48,37 +50,71 @@ export default function Cart() {
 
    
 
-  // const handleRemove = async (item) => {
-  //   setSubmitting(true);
-  //   setError("");
-  //   try {
-  //     await api.delete("/cart/removeFromCart", {
-  //       data: { productId: item.productId || item._id || item.id },
-  //     });
-  //     await fetchCart();
+  const handleRemove = async (productId) => {
+      if(!localStorage.getItem("token"))
+          return
 
-  //     fetchCount()
-  //   } catch (err) {
-  //     setError("Failed to remove item");
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
+      if(!productId)
+          return
 
-  // const handleClear = async () => {
-  //   if (!window.confirm("Clear all items from cart?")) return;
-  //   setSubmitting(true);
-  //   setError("");
-  //   try {
-  //     await api.delete("/cart/clear");
-  //     await fetchCart();
-  //     fetchCount();
-  //   } catch (err) {
-  //     setError("Failed to clear cart");
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
+      const res = await removeFromCartApi(productId)
+
+      console.log("This is From the handel Remove...",res)
+
+      if(!res.success)
+      {
+          toast.error("failed to remove product from cart")
+          return
+      }
+      else{
+          toast.success("Product remove from cart")
+
+          // ✅ UPDATE UI INSTANTLY
+  setProducts((prev) =>
+    prev
+      .map(item =>
+        item.product._id === productId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+      .filter(item => item.quantity > 0)
+  );
+      }
+  };
+
+  const handleClear = async () => {
+
+    console.log("handle clear run..")
+ 
+     
+    if(!localStorage.getItem("token"))
+    {
+      console.log("return from local storage block")
+      return
+    }
+
+    if (!window.confirm("Clear all items from cart?")) 
+      {
+      console.log("return from confirm block")
+      return
+    }
+     
+     const res = await clearCartApi();
+     console.log("res : ",res)
+
+     if(!res.success)
+     {
+        toast.error("cart not clear !")
+        return
+     }
+     else{
+       toast.success("cart clear")
+       navigate("/")
+     }
+     
+     
+
+  };
 
   const handlePlaceOrder = async () => {
        if (products.length === 0) return;
@@ -143,7 +179,7 @@ export default function Cart() {
           <div className="space-y-3 mb-6">
             {products.map((item) => {
               return (
-                <div className="bg-blue-400">
+                <div key={item._id} className="bg-blue-400">
                   <p className="text-red-500">
                     Product Name : {item.product.name}
                   </p>
@@ -151,6 +187,10 @@ export default function Cart() {
                   <p>category : {item.product.category}</p>
                   <p>quantity : {item.quantity}</p>
 
+                  <button className="bg-red-400 p-5 "
+                  onClick={()=>{
+                    handleRemove(item.product._id);
+                  }}>Remove from cart</button>
                   
                 </div>
               );
@@ -160,8 +200,18 @@ export default function Cart() {
           <div>
 
              <button 
-                  className="border-white p-5 rounded-2xl"
-                  onClick={handlePlaceOrder}>Add to cart</button>
+                  className=" p-5 rounded-2xl bg-green-500"                 
+                  onClick={handlePlaceOrder}>Place Order
+             </button>
+
+             <button
+                  onClick={handleClear}
+                  className="p-5 rounded-2xl bg-red-500"
+             >Clear Cart</button>
+
+
+  
+              
 
             <p className="text-green-400 text-5xl font-extrabold ">{total}</p>
           </div>

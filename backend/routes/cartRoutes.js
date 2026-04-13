@@ -42,9 +42,15 @@ router.post("/addToCart", protect, async (req, res) => {
  
 // REMOVE ITEM FROM CART
  
-router.delete("/removeFromCart", protect, async (req, res) => {
+router.delete("/removeFromCart:productId", protect, async (req, res) => {
+  console.log("remove From Cart started")
   try {
-    const { productId } = req.body;
+    const { productId } = req.params;
+
+    console.log("run till here")
+
+      
+     console.log("Product Id : ",productId)
 
     let cart = await Cart.findOne({ user: req.user });
 
@@ -71,6 +77,7 @@ router.delete("/removeFromCart", protect, async (req, res) => {
 
     res.json({ message: "Item updated", cart });
   } catch (error) {
+    console.log(error.message)
     res.status(500).json({message: "unable to remove product from cart",error: error.message });
   }
 });
@@ -125,7 +132,7 @@ router.delete("/clear", protect, async (req, res) => {
     res.status(500).json({message: "unable to clear cart", error: error.message });
   }
 });
-
+ 
 
 // ==========================
 // GET USER CART
