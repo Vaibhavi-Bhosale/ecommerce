@@ -14,6 +14,7 @@ export default function Cart() {
   // const [submitting, setSubmitting] = useState(false);
   // const [error, setError] = useState("");
   const navigate = useNavigate();
+   
     
 
   const { isLoggedIn } = useAuth();
@@ -43,6 +44,7 @@ export default function Cart() {
       setProducts(res);
       console.log(res);
       setLoading(false);
+      
     }
 
     fetchCart();
@@ -68,6 +70,8 @@ export default function Cart() {
       }
       else{
           toast.success("Product remove from cart")
+
+          fetchCount()
 
           // ✅ UPDATE UI INSTANTLY
   setProducts((prev) =>
@@ -109,6 +113,7 @@ export default function Cart() {
      }
      else{
        toast.success("cart clear")
+       fetchCount()
        navigate("/")
      }
      

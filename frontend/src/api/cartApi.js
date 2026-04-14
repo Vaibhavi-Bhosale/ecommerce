@@ -31,12 +31,18 @@ export const productCountInCart  = async()=>{
 
     if(!localStorage.getItem("token"))
         return 0;
+        
 
     try{
         // console.log("api call again and again");
         const res = await api.get("/cart");
     
-        return res?.data?.items?.length ?? 0;
+        
+     
+        return res?.data?.data?.items?.length ?? 0;
+
+
+
     }
     catch{
         return 0;
@@ -51,8 +57,7 @@ export const cartApi = async()=>{
      try{
         const res = await api.get('/cart');
 
-        return res.data?.data?.items;
-
+        return res.data?.data?.items
      }
      catch(error)
      {
@@ -72,7 +77,6 @@ export const removeFromCartApi = async(productId)=>{
          console.log("product delete : ", res)
 
          return {success : true}
-
 
      }catch(err)
      {
