@@ -1,99 +1,105 @@
 import { useEffect, useState } from "react";
-import api from "../api/axios";
+import { toast } from "react-toastify";
+import { getAdminOrders } from "../api/adminApi";
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
-      setError("");
-      try {
-        const res = await api.get("/orders");
-        setOrders(res.data || []);
-      } catch (err) {
-        setError("Failed to load all orders");
-      } finally {
+      const result = await getAdminOrders();
+
+      if (!result.success) {
+        toast.error(result.message || "Failed to load orders");
+        setOrders([]);
         setLoading(false);
+        return;
       }
+
+      setOrders(Array.isArray(result.data) ? result.data : []);
+      setLoading(false);
     };
 
     fetchOrders();
   }, []);
 
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-3xl font-black tracking-tight text-[color:var(--text)]">All Orders</h1>
+    <div className="max-w-5xl mx-auto">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-[color:var(--text)]">
+          Orders
+        </h1>
         <p className="text-sm text-[color:var(--text-muted)]">
-          Admin view of all customer orders.
+          Manage all customer orders
         </p>
       </div>
 
-      {error && (
-        <div className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-          {error}
-        </div>
-      )}
-
+      {/* Loading */}
       {loading ? (
-        <div className="flex justify-center py-10">
-          <span className="text-gray-600">Loading orders...</span>
+        <div className="text-center py-10 text-gray-500">
+          Loading orders...
         </div>
       ) : orders.length === 0 ? (
-        <p className="text-[color:var(--text-muted)]">No orders found.</p>
+        <div className="text-center text-gray-500">
+          No orders found
+        </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-5">
           {orders.map((order) => (
             <div
-              key={order._id || order.id}
-              className="neo-card p-4"
+              key={order.id}
+              className="border rounded-xl p-5 shadow-sm bg-white"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+              {/* Top Section */}
+              <div className="flex justify-between items-start mb-4">
                 <div>
-                  <p className="text-sm font-semibold text-[color:var(--text)]">
-                    Order #{order._id || order.id}
+                  <p className="text-sm font-semibold text-gray-800">
+                    Order #{order.id.slice(-6)}
                   </p>
-                  {order.user && (
-                    <p className="text-xs text-[color:var(--text-muted)]">
-                      User:{" "}
-                      {order.user.email ||
-                        order.user.name ||
-                        order.user._id ||
-                        "Unknown"}
-                    </p>
-                  )}
-                  {order.createdAt && (
-                    <p className="text-xs text-[color:var(--text-muted)]">
-                      {new Date(order.createdAt).toLocaleString()}
-                    </p>
-                  )}
+
+                  <p className="text-xs text-gray-500">
+                    {new Date(order.createdAt).toLocaleString()}
+                  </p>
+
+                  <p className="text-xs text-gray-600 mt-1">
+                    {order.customerEmail}
+                  </p>
                 </div>
-                {order.status && (
-                  <span className="inline-flex items-center rounded-full bg-[color:color-mix(in_srgb,var(--surface-2)_50%,transparent)] px-3 py-1 text-xs font-semibold text-[color:var(--text)]">
-                    {order.status}
-                  </span>
-                )}
+
+                <span className="text-xs px-3 py-1 rounded-full bg-gray-100 font-medium">
+                  {order.status}
+                </span>
               </div>
 
-              {Array.isArray(order.items) && order.items.length > 0 && (
-                <ul className="mb-2 space-y-1 text-sm text-[color:var(--text)]/90">
-                  {order.items.map((item) => (
-                    <li key={item._id || item.id}>
-                      {item.product?.name || "Product"} &times;{" "}
-                      {item.quantity || 1}
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              {order.total && (
-                <p className="text-sm font-black text-[color:var(--primary-strong)]">
-                  Total: ${Number(order.total).toFixed(2)}
+              {/* Items */}
+              <div className="mb-4">
+                <p className="text-sm font-medium text-gray-700 mb-1">
+                  Items
                 </p>
-              )}
+
+                <div className="space-y-1 text-sm text-gray-600">
+                  {order.items.map((item, index) => (
+                    <div key={index} className="flex justify-between">
+                      <span>{item.name}</span>
+                      <span>× {item.quantity}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bottom Section */}
+              <div className="flex justify-between items-center border-t pt-3">
+                <p className="font-semibold text-lg text-black">
+                  ₹{order.total}
+                </p>
+
+                <button className="text-sm px-4 py-2 rounded-md bg-black text-white hover:opacity-90">
+                  View Details
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -101,4 +107,3 @@ export default function AdminOrders() {
     </div>
   );
 }
-

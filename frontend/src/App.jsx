@@ -9,6 +9,7 @@ import ProductDetail from "./pages/ProductDetail.jsx";
 import MyOrders from "./pages/MyOrders.jsx";
 import AdminOrders from "./pages/AdminOrders.jsx";
 import AdminProducts from "./pages/AdminProducts.jsx";
+import AdminAddProduct from "./pages/AdminAddProduct.jsx";
 import SearchProducts from "./pages/SearchProducts.jsx";
 import { Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -78,6 +79,14 @@ function App() {
               element={
                 <AdminRoute>
                   <AdminProducts />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/products/add"
+              element={
+                <AdminRoute>
+                  <AdminAddProduct />
                 </AdminRoute>
               }
             />
