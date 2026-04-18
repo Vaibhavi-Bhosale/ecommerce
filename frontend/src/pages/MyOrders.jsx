@@ -53,46 +53,61 @@ export default function MyOrders() {
       <div className="space-y-5">
         {orders.map((order) => (
           <div
-            key={order._id}
-            className="border rounded-lg p-4 shadow-sm bg-white"
-          >
-            {/* Top Section */}
-            <div className="flex justify-between items-center mb-2">
-              <div>
-                <p className="font-semibold">
-                  Order ID: {order._id}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {new Date(order.createdAt).toLocaleString()}
-                </p>
-              </div>
+  key={order._id}
+  className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md sm:p-5"
+>
+  {/* Top Section */}
+  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    
+    {/* Order Info */}
+    <div className="min-w-0">
+      <p className="truncate text-sm font-semibold text-gray-900 sm:text-base">
+        Order ID: {order._id}
+      </p>
+      <p className="mt-1 text-xs text-gray-500 sm:text-sm">
+        {new Date(order.createdAt).toLocaleString()}
+      </p>
+    </div>
 
-              <span className="text-xs px-3 py-1 rounded-full bg-green-100 text-green-700 font-medium">
-                {order.status}
-              </span>
-            </div>
+    {/* Status */}
+    <span className="w-fit rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+      {order.status}
+    </span>
+  </div>
 
-            {/* Items */}
-            <div className="border-t border-b py-2 my-2 space-y-1">
-              {order.items.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between text-sm"
-                >
-                  <span>
-                    {item.product?.name || "Product"}
-                  </span>
-                  <span>x{item.quantity}</span>
-                  <span>₹{item.price || 0}</span>
-                </div>
-              ))}
-            </div>
+  {/* Items */}
+  <div className="my-4 space-y-2 border-y border-gray-100 py-3">
+    {order.items.map((item, index) => (
+      <div
+        key={index}
+        className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-3 sm:items-center"
+      >
+        {/* Product Name */}
+        <span className="col-span-2 truncate text-gray-800 sm:col-span-1">
+          {item.product?.name || "Product"}
+        </span>
 
-            {/* Total */}
-            <div className="text-right font-semibold">
-              Total: ₹{order.totalAmount}
-            </div>
-          </div>
+        {/* Quantity */}
+        <span className="text-gray-500 sm:text-center">
+          Qty: {item.quantity}
+        </span>
+
+        {/* Price */}
+        <span className="text-right font-medium text-gray-900">
+          ₹{item.price || 0}
+        </span>
+      </div>
+    ))}
+  </div>
+
+  {/* Total */}
+  <div className="flex items-center justify-between">
+    <span className="text-sm text-gray-500">Total</span>
+    <span className="text-lg font-bold text-[color:var(--primary)]">
+      ₹{order.totalAmount}
+    </span>
+  </div>
+</div>
         ))}
       </div>
     )}

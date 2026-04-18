@@ -17,6 +17,7 @@ export default function Home() {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const {fetchCount} = useCart()
+  
        
 
   useEffect(() => {

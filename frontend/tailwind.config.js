@@ -11,9 +11,6 @@ export default {
         heading: ["Space Grotesk", "sans-serif"],
         body: ["Inter", "sans-serif"],
       },
-      extend: {
-   
-}
     },
   },
   plugins: [],

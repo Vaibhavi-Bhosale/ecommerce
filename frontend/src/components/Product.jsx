@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import useAuth from "../context/useAuth";
 
 function ProductCard({ product, handleAddToCart, addingId }) {
   const productId = product._id || product.id;
+  const {isAdmin} = useAuth();
 
   return (
     <div
@@ -60,14 +62,19 @@ function ProductCard({ product, handleAddToCart, addingId }) {
           </Link>
 
           {/* Add to Cart */}
-          <button
-            type="button"
-            onClick={() => handleAddToCart(productId)}
-            disabled={addingId === productId}
-            className="flex-1 inline-flex items-center justify-center rounded-full bg-[color:var(--primary)] px-2 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer"
-          >
-            {addingId === productId ? "Adding..." : "Add to cart"}
-          </button>
+
+          {!isAdmin && (
+            <button
+              type="button"
+              onClick={() => handleAddToCart(productId)}
+              disabled={addingId === productId}
+              className="flex-1 inline-flex items-center justify-center rounded-full bg-[color:var(--primary)] px-2 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer"
+            >
+              {addingId === productId ? "Adding..." : "Add to cart"}
+            </button>
+          )
+        }
+             
         </div>
       </div>
     </div>

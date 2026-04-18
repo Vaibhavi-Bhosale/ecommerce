@@ -119,7 +119,7 @@ function SearchProducts() {
 
 
 
-                 <Product product={product} handleAddToCart={handleAddToCart}   addingId={addingId}/>
+                 <Product key={product._id || product.id} product={product} handleAddToCart={handleAddToCart}   addingId={addingId}/>
 
 
           ))}

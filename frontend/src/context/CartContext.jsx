@@ -4,12 +4,22 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [count, setCount] = useState(null);
+  
 
   const fetchCount = useCallback(async()=>{
-     const res = await productCountInCart();
 
-     console.log("cart count",res)
-     setCount(res);
+    if(!localStorage.getItem("token"))
+    {
+      setCount(0);
+      return;
+    }
+    else{
+      const res = await productCountInCart();
+
+       console.log("cart count",res)
+       setCount(res);
+    }
+     
   }, []);
 
   useEffect(() => {
