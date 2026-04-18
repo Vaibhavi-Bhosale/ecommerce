@@ -4,6 +4,8 @@ import api from "../api/axios";
 import useAuth from "../context/useAuth";
 import { getSingleProduct } from "../api/productApi";
 import { toast } from "react-toastify";
+import useCart from "../context/useCart";
+import { addToCartApi } from "../api/cartApi";
 
 
 export default function ProductDetail() {
@@ -13,6 +15,8 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
+  const {fetchCount} = useCart();
  
 
   useEffect(() => {
@@ -36,24 +40,40 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (productId) => {
     if (!isLoggedIn) {
+      toast.info("login for add to cart")
       navigate("/login");
       return;
     }
+     
+    // console.log("before add to cart")
+     
+    const res = await addToCartApi(productId);
+     fetchCount();
 
-    setSubmitting(true);
-    
-    try {
-      await api.post("/cart/addToCart", {
-        productId: product._id || product.id || id,
-        quantity: 1,
-      });
-      alert("Added to cart");
-    } catch (err) {
-          setError("Failed to add to cart");
-    } finally {
-      setSubmitting(false);
+    // console.log("after add to cart")
+
+    if(!res.success)
+    {
+      // setError(res.message)
+      toast.error(res.message)
+    }
+    else{
+
+      toast.success("product added in cart! yehh")
+      //  alert("product added in cart");
+
+      //  console.log("before callling fetch count")
+
+       
+       setTimeout(() => {
+      fetchCount(); // 🔥 delayed fetch
+    }, 300);
+
+    setSubmitting(false);
+        
+    // console.log("after callling fetch count")
     }
   };
 
@@ -119,7 +139,7 @@ export default function ProductDetail() {
         <div className="flex flex-wrap gap-3">
           <button
             type="button"
-            onClick={handleAddToCart}
+            onClick={ () => handleAddToCart(product._id) }
             disabled={submitting}
             className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-[color:var(--primary)] text-white text-sm font-semibold hover:opacity-90 disabled:opacity-50"
           >

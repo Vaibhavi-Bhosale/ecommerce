@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 const emptyForm = {
   name: "",
   price: "",
-  image: "",
+  image: null,
   category: "",
   description: "",
 };
@@ -33,18 +33,40 @@ export default function AdminProductForm({
     });
   }, [initialProduct]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+ const handleChange = (e) => {
+  const { name, value, files } = e.target;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit({
-      ...form,
-      price: Number(form.price || 0),
-    });
-  };
+  if (name === "image") {
+    setForm((prev) => ({
+      ...prev,
+      image: files[0],
+    }));
+  } else {
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+};
+
+ const handleSubmit = (e) => {
+  e.preventDefault();
+
+  const data = new FormData();
+  data.append("name", form.name);
+  data.append("price", form.price);
+  data.append("category", form.category);
+  data.append("description", form.description);
+  data.append("image", form.image);
+
+  console.log("Submitting product form with data:", {
+    name: form.name,
+    price: form.price,    category: form.category,
+    description: form.description,
+    image: form.image,
+  }); 
+  onSubmit(data);
+};
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-4 neo-card p-4 md:grid-cols-2">
@@ -73,12 +95,12 @@ export default function AdminProductForm({
         className="neo-input block w-full rounded-xl px-2 py-1.5 text-sm"
       />
       <input
-        name="image"
-        placeholder="Image URL or file name"
-        value={form.image}
-        onChange={handleChange}
-        className="neo-input block w-full rounded-xl px-2 py-1.5 text-sm"
-      />
+  type="file"
+  name="image"
+  accept="image/*"
+  onChange={handleChange}
+  className="neo-input block w-full rounded-xl px-2 py-1.5 text-sm"
+/>
       <input
         name="category"
         placeholder="Category"

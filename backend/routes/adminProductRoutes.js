@@ -18,14 +18,23 @@ router.get("/test", (req, res) => {
 router.post("/", protect, admin, upload.single("image"), async (req, res) => {
   
   try {
-    const { product_name, price, category, description } = req.body;
+    const { name, price, category, description } = req.body;
 
     const imageUrl = req.file.path;
     const imageId = req.file.filename;
 
-    
+
+    console.log("Received product creation request with data:", {
+      name,
+      price,  
+      category,
+      description,
+      image: imageUrl,
+      imageId,
+    });
+
     if (
-      !product_name ||
+      !name ||
       !price ||
       !imageUrl ||
       !category ||
@@ -39,7 +48,7 @@ router.post("/", protect, admin, upload.single("image"), async (req, res) => {
     }
 
     const product = await Product.create({
-      name: product_name,
+      name,
       price,
       image: imageUrl,
       imageId,
@@ -56,49 +65,51 @@ router.post("/", protect, admin, upload.single("image"), async (req, res) => {
 
 // UPDATE PRODUCT
 router.put("/:id", protect, admin, upload.single("image"), async (req, res) => {
-
   try {
-    
-    const { product_name, price, category, description } = req.body;
-    const product_Id = req.params.id;
+    const { name, price, category, description } = req.body;
+    const productId = req.params.id;
 
-   
-    if (!product_Id) {
-      res.status(400).json({ error: "product id is not there", message: "No Product Found" });
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
 
-    const product = await Product.findById(product_Id);
-    const imageIdOld = product.imageId;
+    let image = product.image;
+    let imageId = product.imageId;
 
-    if (req.file && imageIdOld) {
-      const deleteRes = await cloudinary.uploader.destroy(imageIdOld);
+    if (req.file) {
+      if (imageId) {
+        await cloudinary.uploader.destroy(imageId);
+      }
+
+      image = req.file.path;
+      imageId = req.file.filename;
     }
 
-    const image = req.file.path;
-    const imageId = req.file.filename;
-
-    const result = await Product.findOneAndUpdate(
-      { _id: product_Id },
+    const result = await Product.findByIdAndUpdate(
+      productId,
       {
-        product_name,
+        name,
         price,
         category,
         description,
         image,
         imageId,
       },
-      { new: true },
+      { new: true }
     );
 
-    // console.log(result);
-    if (res) {
-      res
-        .status(200)
-        .json({ message: "Product updatet successfull", data: result });
-    }
+    res.status(200).json({
+      message: "Product updated successfully",
+      data: result,
+    });
+
   } catch (error) {
-    
-    res.status(401).json({ error: error.message , message : "user not update"});
+    res.status(500).json({
+      message: "Product not updated",
+      error: error.message,
+    });
   }
 });
 

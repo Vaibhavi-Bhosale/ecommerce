@@ -38,22 +38,38 @@ export const getAdminProducts = async () => {
 // Admin: create product.
 export const createAdminProduct = async (payload) => {
   try {
-    const res = await api.post("/admin/products", payload);
+    const res = await api.post("/admin/products", payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
     return { success: true, data: unwrapData(res) };
   } catch (error) {
-    console.log(error.message);
-    return { success: false, message: "Failed to create product" };
+    console.log(error.response?.data || error.message);
+    return {
+      success: false,
+      message: error.response?.data?.message || "Failed to create product",
+    };
   }
 };
 
 // Admin: update product by id.
 export const updateAdminProduct = async (id, payload) => {
   try {
-    const res = await api.put(`/admin/products/${id}`, payload);
+    const res = await api.put(`/admin/products/${id}`, payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
     return { success: true, data: unwrapData(res) };
   } catch (error) {
-    console.log(error.message);
-    return { success: false, message: "Failed to update product" };
+    console.log(error.response?.data || error.message);
+    return {
+      success: false,
+      message: error.response?.data?.message || "Failed to update product",
+    };
   }
 };
 
