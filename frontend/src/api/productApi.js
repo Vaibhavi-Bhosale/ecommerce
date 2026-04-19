@@ -1,18 +1,26 @@
 import api from "./axios";
 
-export const getAllProductsApi = async()=>{
-    try {
-         const res = await api.get("/products")
-         console.log(res.data)
+export const getAllProductsApi = async () => {
+  try {
+    const res = await api.get("/products");
 
-         return {success:true, data: res.data}
+    console.log(res.data);
 
-    } catch (error) {
-         console.log(error.res?.data?.message);
+    return {
+      success: true,
+      data: Array.isArray(res.data)
+        ? res.data
+        : res.data?.data || [],
+    };
+  } catch (error) {
+    console.log(error.response?.data?.message);
 
-         return {success:false, message: "Failed to load products. Please try again later."}
-    }
-}
+    return {
+      success: false,
+      message: "Failed to load products. Please try again later.",
+    };
+  }
+};
 
 export const getSingleProduct = async(id)=>{
 
